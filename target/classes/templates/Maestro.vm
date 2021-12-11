@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Maestro </title>
+    <link rel="stylesheet" href="/css/indexMaestro.css" type = "text/css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  </head>
+  <body>
+        <div class="container-fluid bg-dark fixed-top">
+          <nav class="navbar navbar-dark bg-dark">
+            <a class="navbar-brand"><img src="/imagenes/logo.jpg" width="30" height="30" alt="Logo de la página"> Bienvenido Maestro</a>          
+              <div class="navbar" >
+                <ul class="nav justify-content-end nav-justified">
+                  <li class="nav-item">
+                    <a class="nav-link active" type="button" id="btnCrearExamen" style="color: #ffffff;" aria-current="page" onclick="openForm()">Crear examen</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" style="color: #ffffff;" aria-current="page" href="#">Resultados de Examenes</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" style="color: #ffffff;" aria-current="page" href="#">Administrar alumnos</a>
+                  </li>  
+                </ul>
+              </div>
+            </div>
+          </nav> 
+        </div>
+      <!-- fin menu -->
+      <!-- slider -->
+        <div class="container-fluid slider d-flex align-items-center" >
+            <div class="text-center text-white">
+                <h1 class="display">Examenes existentes</h1>
+            </div>
+        </div>
+      <!-- fin slider-->  
+      <!-- Examenes-->
+        <div class="d-flex flex-row ">
+          #foreach($examen in $examenes)
+            <div class="container" id="$examen.noExamen">
+              <div class="card">
+                <div class="box">
+                  <div class="content">
+                    <h4 id="noExamen" style="color: #ffffff;">No. examen: $examen.noExamen</h4>
+                    <h3>$examen.nombreExamen</h3>
+                    <p>Materia: $examen.materia</p>
+                    <a type="button" id="btnModificar$examen.noExamen" >Modificar</a>
+                    <a class ="click" type="button" id="$examen.noExamen" >Borrar</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          #end              
+        </div>
+        <div class="form-popup" id="myForm">
+          <form action="" class="form-container">
+            <h1>Crear examen</h1>
+            <label for="text"><b>Nombre del Examen</b></label>
+            <input type="text" placeholder="Introduce el nombre del nuevo examen" id="nombreExamen">
+
+            <label for="text"><b>Materia</b></label>
+            <input type="text" placeholder="Introduce la materia del examen" id="materia">
+
+            <button type="button" class="btn" id="btnCrear">Crear</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Cerrar</button>
+          </form>
+        </div>  
+      <!-- Examenes-->
+       <!-- footer--> 
+      <footer class="container-fluid bg-dark text-white py-5 md-4" >
+          <center><h4><img src="/imagenes/logo.jpg" width="30" height="30" class="d-inline-block align-top" alt="Logo de la pagina"> Proyecto sistemas web</h4>
+            <p> Integrantes:</p>
+            <p>Ariana Tejeda Santiz</p>
+            <p>Adbel Rene García</p>
+            <p>Justin Martínez Hernández</p>
+          </center>
+      </footer>
+       <!-- fin footer--> 
+      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+      <script src="/js/indexMaestro.js"></script>
+
+  </body>
+</html>
