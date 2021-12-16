@@ -35,6 +35,14 @@ create table pregunta(
     foreign key (noExamen) references examen(noExamen)
 );
 
+create table respuesta(
+    noRespuesta int not null,
+    noPregunta int not null,
+    noExamen int not null,
+    respuesta varchar(300) not null,
+    foreign key (noExamen) references examen(noExamen)
+);
+
 insert into examen values(0, "Examen 1","Sistemas Web", 0, 10);
 insert into examen values(0, "Examen 2","Ingles", 0, 15);
 insert into examen values(0, "Examen 3","Español", 0 ,20);

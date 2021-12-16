@@ -14,6 +14,11 @@ var d = "d";
 var div = document.createElement('div');
 var label = document.createElement('b');
 
+var video2;
+var video3;
+var video4;
+var video5;
+
 function submitAnswers(){
 	var total = 5;
 	var score = 0;
@@ -70,7 +75,7 @@ function tipoAbierta(){
     while (div.firstChild) {
         div.removeChild(div.firstChild);
     }
-    label.parentNode.removeChild(label);
+    //label.parentNode.removeChild(label);
     contadorCerrada = 0;
 
     document.getElementById("radioAbierta").checked = true;
@@ -100,6 +105,7 @@ function tipoCerrada(){
         var br2 = document.createElement('br');
         var br3 = document.createElement('br');
         var br4 = document.createElement('br');
+        
     
         var input1 = document.createElement('input');
         input1.setAttribute("placeholder", "Introduce la opción 1");
@@ -146,6 +152,22 @@ function tipoCerrada(){
         radiobtn4.setAttribute("name", name);
         radiobtn4.setAttribute("value",d);
         radiobtn4.setAttribute("id", name + d);
+
+        video2 = document.createElement('input');
+        video2.setAttribute("type", "file");
+        video2.setAttribute("id", "video2");
+
+        video3 = document.createElement('input');
+        video3.setAttribute("type", "file");
+        video3.setAttribute("id", "video3");
+
+        video4 = document.createElement('input');
+        video4.setAttribute("type", "file");
+        video4.setAttribute("id", "video4");
+
+        video5 = document.createElement('input');
+        video5.setAttribute("type", "file");
+        video5.setAttribute("id", "video5");
         
     
         
@@ -154,15 +176,19 @@ function tipoCerrada(){
     
         div.appendChild(radiobtn1);
         div.appendChild(input1);
+        div.appendChild(video2);
         div.appendChild(br1);
         div.appendChild(radiobtn2);
         div.appendChild(input2);
+        div.appendChild(video3);
         div.appendChild(br2);
         div.appendChild(radiobtn3);
         div.appendChild(input3);
+        div.appendChild(video4);
         div.appendChild(br3);
         div.appendChild(radiobtn4);
         div.appendChild(input4);
+        div.appendChild(video5);
         div.appendChild(br4);
     
     
@@ -178,6 +204,7 @@ function tipoCerrada(){
 
 var btnAgregar = document.getElementById("btnAgregar")
 function agregarPregunta(){
+    var formData = new FormData();
     var interrogante; 
     var respuesta;
     var opcion1;
@@ -187,6 +214,8 @@ function agregarPregunta(){
     var tipo;
     if (document.getElementById("radioAbierta").checked) {
         interrogante = document.getElementById("interrogante").value;
+        video1= document.querySelector("#video1");
+        formData.append("video1", video1.files[0]);
         respuesta = ""; //document.getElementById("respuesta"+contadorIdRespuesta).value;
         opcion1 = "";
         opcion2 = "";
@@ -206,10 +235,17 @@ function agregarPregunta(){
             .then(function (res) {
                 alert("Pregunta:" + res.data.status);
                 closeForm();
+                axios.post("http://localhost:4567/video", formData, {
+                    headers : {
+                        "Content-Type" : "multipart/form-data"
+                    }
+                })
             })
             .catch(function (error) {
                 console.log(error)
             })
+
+
 
         var formulario = document.getElementById("divPreguntas");
         var pregunta = document.createElement('h3');
@@ -228,6 +264,8 @@ function agregarPregunta(){
 
     }else if(document.getElementById("radioCerrada").checked){
         interrogante = document.getElementById("interrogante").value;
+        video1= document.querySelector("#video1");
+        formData.append("video1", video1.files[0]);
         if(document.getElementById(name + a).checked){
             respuesta = "a";
         }else if (document.getElementById(name + b).checked){
@@ -241,6 +279,14 @@ function agregarPregunta(){
         opcion2 = document.getElementById("input"+name+b).value;
         opcion3 = document.getElementById("input"+name+c).value;
         opcion4 = document.getElementById("input"+name+d).value;
+        var Video2= document.querySelector("#video2");
+        formData.append("video2", Video2.files[0]);
+        var Video3= document.querySelector("#video3");
+        formData.append("video3", Video3.files[0]);
+        var Video4= document.querySelector("#video4");
+        formData.append("video4", Video4.files[0]);
+        var Video5= document.querySelector("#video5");
+        formData.append("video5", Video5.files[0]);
         tipo = "Cerrada";
         axios.post("http://localhost:4567/agregarPregunta", {
             noPregunta : contadorNoPregunta,
@@ -260,10 +306,16 @@ function agregarPregunta(){
                 }
                 label.parentNode.removeChild(label);
                 contadorCerrada = 0;
+                axios.post("http://localhost:4567/video", formData,{
+                    headers : {
+                        "Content-Type" : "multipart/form-data"
+                    }
+                })
             })
             .catch(function (error) {
                 console.log(error)
             })
+
 
     
         var formulario = document.getElementById("divPreguntas");

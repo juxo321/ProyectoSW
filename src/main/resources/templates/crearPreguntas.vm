@@ -50,7 +50,7 @@
             <h1>Crear pregunta</h1>
             <label for="text"><b>Pregunta</b></label>
             <input type="text" placeholder="Introduce tu nueva pregunta" id="interrogante">
-
+            <input type="file" id="video1"/>
             <label for="text"><b>Tipo</b></label><br>
             <input type="radio" name="tipo" onclick="tipoAbierta()" id = "radioAbierta"/>Abierta
             <input type="radio" name="tipo" onclick="tipoCerrada()" id = "radioCerrada"/>Cerrada<br>

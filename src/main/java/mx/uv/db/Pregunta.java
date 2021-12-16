@@ -101,6 +101,22 @@ public class Pregunta {
         this.tipo = tipo;
     }
 
+
+    @Override
+    public String toString() {
+        return "{" +
+            " noPregunta='" + getNoPregunta() + "'" +
+            ", noExamen='" + getNoExamen() + "'" +
+            ", interrogante='" + getInterrogante() + "'" +
+            ", respuesta='" + getRespuesta() + "'" +
+            ", opcion1='" + getOpcion1() + "'" +
+            ", opcion2='" + getOpcion2() + "'" +
+            ", opcion3='" + getOpcion3() + "'" +
+            ", opcion4='" + getOpcion4() + "'" +
+            ", tipo='" + getTipo() + "'" +
+            "}";
+    }
+
     
     
 }

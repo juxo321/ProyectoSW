@@ -1,6 +1,10 @@
-mx\uv\db\Examen.class
 mx\uv\db\UsuarioDAO.class
 mx\uv\db\Conexion.class
+mx\uv\db\PreguntaDAO.class
+mx\uv\db\Respuesta.class
 mx\uv\App.class
+mx\uv\db\Examen.class
+mx\uv\db\Pregunta.class
 mx\uv\db\ExamenDAO.class
 mx\uv\db\Usuario.class
+mx\uv\db\RespuestaDAO.class

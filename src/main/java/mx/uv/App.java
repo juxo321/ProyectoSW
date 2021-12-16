@@ -1,8 +1,14 @@
 package mx.uv;
 
+import spark.*;
 import static spark.Spark.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.io.*;
+import java.nio.file.*;
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -29,12 +35,15 @@ public class App
     private static Gson gson = new Gson();
     private static Map<Integer, Examen> examenes = new HashMap<>();
     private static Map<Integer, Pregunta> preguntas = new HashMap<>();
-    private static Examen examenActual;
+    private static Pregunta pregunta = new Pregunta();
+    private static Examen examenActual = new Examen();
 
     public static void main( String[] args )
     {
 
         staticFileLocation("/public");
+
+        staticFiles.externalLocation("/ProyectoSW/src/main/resources/public");
 
         options("/*", (request, response) -> {
 
@@ -150,9 +159,9 @@ public class App
         post("/agregarPregunta", (req, res) -> {
             String json = req.body();
             System.out.println(json);
-            Pregunta pregunta = gson.fromJson(json, Pregunta.class);
+            pregunta = gson.fromJson(json, Pregunta.class);
             pregunta.setNoExamen(ultimoExamen());
-            System.out.println(pregunta.toString());
+            //System.out.println(pregunta.toString());
             
 
             PreguntaDAO preguntaDAO = new PreguntaDAO();
@@ -185,14 +194,110 @@ public class App
             return new VelocityTemplateEngine().render(new ModelAndView(map, "templates/formularioExamen.vm"));
         });
 
-        
+        //crud respuestas
+
+        post("/agregarRespuesta", (req, res) -> {
+            String json = req.body();
+            System.out.println(json);
+            Respuesta respuesta = gson.fromJson(json, Respuesta.class);
+            System.out.println(respuesta.toString());
+            
+
+            RespuestaDAO respuestaDAO = new RespuestaDAO();
+            JsonObject respuesta1 = new JsonObject();
+            respuesta1.addProperty("status", respuestaDAO.insertarRespuesta(respuesta));
+            return respuesta1;
+        }); 
+  
 
 
+        //Upload videos
+
+        get("/", (req, res) ->
+                  "<form method='post' enctype='multipart/form-data'>" // note the enctype
+                + "    <input type='file' name='videoGrabado' accept='.png'>" // make sure to call getPart using the same "name" in the post
+                + "    <button>Upload picture</button>"
+                + "</form>"
+        );
+
+        post("/video", (req, res) -> {
+
+            File uploadDir = new File("upload");
+            uploadDir.mkdir(); 
+            
+            System.out.println(pregunta.toString());
+            System.out.println(pregunta.getTipo());
+            if(pregunta.getTipo().equals("Abierta")){
+                Path tempFile = Files.createTempFile(uploadDir.toPath(), "video", ".mp4");
+
+                req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
+                try (InputStream input = req.raw().getPart("video1").getInputStream()) { // getPart needs to use same "name" as input field in form
+                Files.copy(input, tempFile, StandardCopyOption.REPLACE_EXISTING);
+                }
+                File file = tempFile.toFile();
+                File fileRenombrado = new File(uploadDir.toPath()+"/"+"videoExamen" + ultimoExamen()+ "Pregunta"+pregunta.getNoPregunta()+ ".mp4");
+                file.renameTo(fileRenombrado);
+            }else if (pregunta.getTipo().equals("Cerrada")){
+                for(int i=1;i<6;i++){
+                    Path tempFile = Files.createTempFile(uploadDir.toPath(), "video"+i, ".mp4");
+    
+                    req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
+                    try (InputStream input = req.raw().getPart("video"+i).getInputStream()) { // getPart needs to use same "name" as input field in form
+                    Files.copy(input, tempFile, StandardCopyOption.REPLACE_EXISTING);
+                    }
+                    if(i==1){
+                        File file = tempFile.toFile();
+                        File fileRenombrado = new File(uploadDir.toPath()+"/"+"videoExamen" + ultimoExamen()+ "Pregunta"+pregunta.getNoPregunta()+ ".mp4");
+                        file.renameTo(fileRenombrado);  
+                    }else if(i==2){
+                        File file = tempFile.toFile();
+                        File fileRenombrado = new File(uploadDir.toPath()+"/"+"videoExamen" + ultimoExamen()+ "Pregunta"+pregunta.getNoPregunta()+"opciona"+".mp4");
+                        file.renameTo(fileRenombrado);
+                    }else if(i==3){
+                        File file = tempFile.toFile();
+                        File fileRenombrado = new File(uploadDir.toPath()+"/"+"videoExamen" + ultimoExamen()+ "Pregunta"+pregunta.getNoPregunta()+"opcionb"+".mp4");
+                        file.renameTo(fileRenombrado);
+                    }else if(i==4){
+                        File file = tempFile.toFile();
+                        File fileRenombrado = new File(uploadDir.toPath()+"/"+"videoExamen" + ultimoExamen()+ "Pregunta"+pregunta.getNoPregunta()+"opcionc"+".mp4");
+                        file.renameTo(fileRenombrado);
+                    }else if(i==5){
+                        File file = tempFile.toFile();
+                        File fileRenombrado = new File(uploadDir.toPath()+"/"+"videoExamen" + ultimoExamen()+ "Pregunta"+pregunta.getNoPregunta()+"opciond"+".mp4");
+                        file.renameTo(fileRenombrado);
+                    }
+                }
+            }
+            return "Hola";
+        });
+
+        post("/videoRespuesta", (req, res) -> {
+
+            File uploadDir = new File("upload");
+            uploadDir.mkdir(); 
+            
+            System.out.println(pregunta.toString());
+            System.out.println(pregunta.getTipo());
+            Path tempFile = Files.createTempFile(uploadDir.toPath(), "video", ".mp4");
+
+            req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
+            try (InputStream input = req.raw().getPart("video1").getInputStream()) { // getPart needs to use same "name" as input field in form
+            Files.copy(input, tempFile, StandardCopyOption.REPLACE_EXISTING);
+            }
+            File file = tempFile.toFile();
+            File fileRenombrado = new File(uploadDir.toPath()+"/"+"videoExamen" + ultimoExamen()+ "Pregunta"+pregunta.getNoPregunta()+ ".mp4");
+            file.renameTo(fileRenombrado);
+
+            return "Hola";
+        });
+
+    
     }
 
     public static int ultimoExamen(){
         ExamenDAO examenDAO = new ExamenDAO();
         return examenDAO.ultimoExamen();
     }
+
 
 }

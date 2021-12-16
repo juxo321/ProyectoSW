@@ -34,28 +34,61 @@
 				<form name="quizForm" onsubmit="return submitAnswers()" id = "formulario"> 
           <div id ="divPreguntas">
           #foreach($pregunta in $preguntas)
+              
+              #set( $totalPreguntas = $preguntas.size())
+              <input type="hidden" value = "$totalPreguntas" id="totalPreguntas">
+
+              #set( $noExamen = $pregunta.noExamen)
+              <input type="hidden" value = "$noExamen" id="noExamen">
+
+              #set( $tipo = $pregunta.tipo)
+              <input type="hidden" value = "$tipo" id="tipo$pregunta.noPregunta">
+
+              #set( $noPregunta = $pregunta.noPregunta)
+              <input type="hidden" value = "$noPregunta" id="$pregunta.noPregunta">
+
             #if ($pregunta.tipo == "Abierta")
-              <h3>$pregunta.noPregunta . $pregunta.interrogante</h3>
+              <h3 >$pregunta.noPregunta . $pregunta.interrogante</h3>              
+              <video id="" width="20%" src="/upload/videoExamen${pregunta.noExamen}Pregunta${pregunta.noPregunta}.mp4" alt="Video alternativo a pregunta $pregunta.noPregunta" controls></video>
+              
+              #set( $id = $pregunta.noPregunta)
+
+              <video id="camaraPregunta$pregunta.noPregunta" width="20%"></video>
+              <a class ="click" type="button" id="grabar$pregunta.noPregunta" onclick ="comenzarAGrabar(${id})">Grabar</a> 
+              <a class ="click" type="button" id="detener$pregunta.noPregunta" onclick = "detenerGrabacion()">Detener</a>
+              <div id="xxx$pregunta.noPregunta"></div>
+              <br>
               <input type="text" placeholder="Introduce tu respuesta" id="respuesta$pregunta.noPregunta">
             #else
               <h3>$pregunta.noPregunta . $pregunta.interrogante</h3>
+
+              <video id="" width="20%" src="/upload/videoExamen${pregunta.noExamen}Pregunta${pregunta.noPregunta}.mp4" alt="Video alternativo a pregunta $pregunta.noPregunta" controls></video>
+              <br>
               <input type="radio" name="opcion$pregunta.noPregunta" value="a" id="opcion$pregunta.noPregunta a">
               <label for="opcion1">$pregunta.opcion1</label>
+              <br>
+              <video id="" width="20%" src="/upload/videoExamen${pregunta.noExamen}Pregunta${pregunta.noPregunta}opciona.mp4" alt="Video alternativo a la opcion 1" controls></video>
               <br>
               <input type="radio" name="opcion$pregunta.noPregunta" value="a" id="opcion$pregunta.noPregunta b">
               <label for="opcion2">$pregunta.opcion2</label>
               <br>
+              <video id="" width="20%" src="/upload/videoExamen${pregunta.noExamen}Pregunta${pregunta.noPregunta}opcionb.mp4" alt="Video alternativo a la opcion 1" controls></video>
+              <br>
               <input type="radio" name="opcion$pregunta.noPregunta" value="a" id="opcion$pregunta.noPregunta c">
               <label for="opcion3">$pregunta.opcion3</label>
               <br>
+              <video id="" width="20%" src="/upload/videoExamen${pregunta.noExamen}Pregunta${pregunta.noPregunta}opcionc.mp4" alt="Video alternativo a la opcion 1" controls></video>
+              <br>
               <input type="radio" name="opcion$pregunta.noPregunta" value="a" id="opcion$pregunta.noPregunta d">
               <label for="opcion4">$pregunta.opcion4</label>
+              <br>
+              <video id="" width="20%" src="/upload/videoExamen${pregunta.noExamen}Pregunta${pregunta.noPregunta}opciond.mp4" alt="Video alternativo a la opcion 1" controls></video>
               <br>
             #end
           #end       
           </div>
           <br><br>
-					<button type="button" id = "btnGuardarFormulario" >Guardar</button>
+					<button type="button" id = "btnGuardarFormulario" onclick = "GuardarRespuestas()">Guardar</button>
 				</form>
 			</section>
 		</div>
